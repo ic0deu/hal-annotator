@@ -4,10 +4,12 @@ import i.c0d.eu.hal.LinkElement;
 import i.c0d.eu.hal.annotation.HalEmbedded;
 import i.c0d.eu.hal.annotation.HalLink;
 
+import java.util.Set;
+
 public class RestResponse {
 
     @HalLink
-    private LinkElement name;
+    private Set<LinkElement> name;
 
     @HalEmbedded
     private RestResponse restResponse;
@@ -24,11 +26,11 @@ public class RestResponse {
     private String surname;
 
 
-    public LinkElement getName() {
+    public Set<LinkElement> getName() {
         return name;
     }
 
-    public void setName(LinkElement name) {
+    public void setName(Set<LinkElement> name) {
         this.name = name;
     }
 
