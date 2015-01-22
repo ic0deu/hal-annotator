@@ -1,8 +1,12 @@
 package i.c0d.eu.hal;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class LinkElement {
@@ -17,38 +21,6 @@ public class LinkElement {
      */
     @JsonProperty
     private String href;
-
-    public String getHref() {
-        return href;
-    }
-
-    public Boolean getTemplated() {
-        return templated;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public String getDeprecation() {
-        return deprecation;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getProfile() {
-        return profile;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getHreflang() {
-        return hreflang;
-    }
 
     /** 5.2.  templated
      *
@@ -130,11 +102,77 @@ public class LinkElement {
      */
     @JsonProperty
     private String hreflang;
+    
+    @JsonIgnore
+    private String linkName;
 
+    @JsonIgnore
+    public Set<LinkElement> getSubElements() {
+        return subElements;
+    }
+
+    @JsonIgnore
+    private Set<LinkElement> subElements;
+
+    public String getHref() {
+        return href;
+    }
+
+    public Boolean getTemplated() {
+        return templated;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getDeprecation() {
+        return deprecation;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getProfile() {
+        return profile;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getHreflang() {
+        return hreflang;
+    }
+
+    @JsonIgnore
+    public String getLinkName() { return linkName; }
+
+    public static class ArrayBuilder {
+        private final String linkName;
+        private Set<LinkElement> linkElements = new HashSet<LinkElement>();
+        
+        public ArrayBuilder withLink(LinkElement linkElement) { this.linkElements.add(linkElement); return this;}
+
+        public ArrayBuilder(String linkName) {
+            this.linkName = linkName;
+        }
+        
+        public LinkElement build() {
+            LinkElement subElements = new LinkElement();
+            subElements.linkName = linkName;
+            subElements.subElements = linkElements;
+            return subElements;
+        }
+        
+    }
+    
     public static class Builder {
         // Required parameters
         private final String href;
         // Optional parameters - initialized to default values
+        private String linkName;
         private Boolean templated;
         private String type;
         private String deprecation;
@@ -143,8 +181,11 @@ public class LinkElement {
         private String title;
         private String hreflang;
 
+        public Builder(String linkName, String href)
+        {  this.href = href; this.linkName = linkName; }
         public Builder(String href)
-        {  this.href = href;  }
+        {  this.href = href; }
+        
         public Builder templated(Boolean templated)
         {  this.templated = templated;      return this; }
         public Builder type(String type)
@@ -162,8 +203,11 @@ public class LinkElement {
         public LinkElement build() {
             return new LinkElement(this);
         }
+        
     }
 
+    private LinkElement() {}
+    
     private LinkElement(Builder builder) {
         this.href        = builder.href;
         this.templated   = builder.templated;
@@ -173,5 +217,8 @@ public class LinkElement {
         this.profile     = builder.profile;
         this.title       = builder.title;
         this.hreflang    = builder.hreflang;
+        this.linkName    = builder.linkName;
     }
+    
+    
 }

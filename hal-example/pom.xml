@@ -8,7 +8,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>hal-example</artifactId>
-    <version>1.3-SNAPSHOT</version>
+    <version>1.2.2-SNAPSHOT</version>
 
     <dependencies>
         <dependency>
@@ -24,45 +24,13 @@
         <dependency>
             <groupId>i.c0d.eu</groupId>
             <artifactId>hal-annotation-processor</artifactId>
-            <version>1.2-SNAPSHOT</version>
+            <version>1.2.2-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>i.c0d.eu</groupId>
             <artifactId>hal-annotation</artifactId>
-            <version>1.2-SNAPSHOT</version>
+            <version>1.2.2-SNAPSHOT</version>
         </dependency>
     </dependencies>
-
-    <!--<build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.0</version>
-                <configuration>
-                    <annotationProcessors>
-                        <annotationProcessor>
-                            i.c0d.eu.hal.annotation.processor.HalAnnotationProcessor</annotationProcessor>
-                    </annotationProcessors>
-                    <debug>true</debug>
-                    <optimize>true</optimize>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                    <compilerArguments>
-                        <AaddGeneratedAnnotation>true</AaddGeneratedAnnotation>
-                        <Adebug>true</Adebug>
-                    </compilerArguments>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>i.c0d.eu</groupId>
-                        <artifactId>hal-annotation-processor</artifactId>
-                        <version>1.0-SNAPSHOT</version>
-                        <scope>compile</scope>
-                    </dependency>
-                </dependencies>
-            </plugin>
-        </plugins>
-    </build>-->
 </project>

@@ -15,21 +15,7 @@ public class HalLinkSerializer extends JsonSerializer<Object> {
         if(linkElements instanceof LinkElement) {
             jsonGenerator.writeStartObject();
             jsonGenerator.writeFieldName(((LinkElement) linkElements).getName());
-            jsonGenerator.writeStartObject();
-            jsonGenerator.writeStringField("href", ((LinkElement) linkElements).getHref());
-            if(((LinkElement) linkElements).getHreflang() != null)
-                jsonGenerator.writeStringField("hreflang", ((LinkElement) linkElements).getHreflang());
-            if(((LinkElement) linkElements).getDeprecation() != null)
-                jsonGenerator.writeStringField("deprecation", ((LinkElement) linkElements).getDeprecation());
-            if(((LinkElement) linkElements).getProfile() != null)
-                jsonGenerator.writeStringField("profile", ((LinkElement) linkElements).getProfile());
-            if(((LinkElement) linkElements).getTitle() != null)
-                jsonGenerator.writeStringField("title", ((LinkElement) linkElements).getTitle());
-            if(((LinkElement) linkElements).getType() != null)
-                jsonGenerator.writeStringField("type", ((LinkElement) linkElements).getType());
-            if(((LinkElement) linkElements).getTemplated() != null)
-                jsonGenerator.writeBooleanField("templated", ((LinkElement) linkElements).getTemplated());
-            jsonGenerator.writeEndObject();
+            generateLinkElement(jsonGenerator, (LinkElement) linkElements);
             jsonGenerator.writeEndObject();
         }
         
@@ -39,24 +25,38 @@ public class HalLinkSerializer extends JsonSerializer<Object> {
 
             while (linkElementIterator.hasNext()) {
                 LinkElement element = linkElementIterator.next();
-                jsonGenerator.writeFieldName(element.getName());
-                jsonGenerator.writeStartObject();    
-                jsonGenerator.writeStringField("href", element.getHref());
-                if(element.getHreflang() != null)
-                    jsonGenerator.writeStringField("hreflang", element.getHreflang());
-                if(element.getDeprecation() != null)
-                    jsonGenerator.writeStringField("deprecation", element.getDeprecation());
-                if(element.getProfile() != null)
-                    jsonGenerator.writeStringField("profile", element.getProfile());
-                if(element.getTitle() != null)
-                    jsonGenerator.writeStringField("title", element.getTitle());
-                if(element.getType() != null)
-                    jsonGenerator.writeStringField("type", element.getType());
-                if(element.getTemplated() != null)
-                    jsonGenerator.writeBooleanField("templated", element.getTemplated());
-                jsonGenerator.writeEndObject();
+                jsonGenerator.writeFieldName(element.getLinkName());
+                if(element.getHref() != null) {
+                    generateLinkElement(jsonGenerator, element);
+                } else {
+                    jsonGenerator.writeStartArray();
+                    for(LinkElement subElement : element.getSubElements()) {
+                        generateLinkElement(jsonGenerator, subElement);
+                    }
+                    jsonGenerator.writeEndArray();
+                    
+                }
             }
             jsonGenerator.writeEndObject();
         }
+    }
+    
+    private void generateLinkElement (JsonGenerator jsonGenerator, LinkElement element) throws IOException {
+        jsonGenerator.writeStartObject();
+        jsonGenerator.writeStringField("href", element.getHref());
+        if (element.getHreflang() != null)
+            jsonGenerator.writeStringField("hreflang", element.getHreflang());
+        if (element.getDeprecation() != null)
+            jsonGenerator.writeStringField("deprecation", element.getDeprecation());
+        if (element.getProfile() != null)
+            jsonGenerator.writeStringField("profile", element.getProfile());
+        if (element.getTitle() != null)
+            jsonGenerator.writeStringField("title", element.getTitle());
+        if (element.getType() != null)
+            jsonGenerator.writeStringField("type", element.getType());
+        if (element.getTemplated() != null)
+            jsonGenerator.writeBooleanField("templated", element.getTemplated());
+        jsonGenerator.writeEndObject();
+        
     }
 }

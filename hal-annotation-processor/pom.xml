@@ -5,43 +5,23 @@
     <parent>
         <artifactId>hal-annotation-project</artifactId>
         <groupId>i.c0d.eu</groupId>
-        <version>1.2-SNAPSHOT</version>
+        <version>1.2.2-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <packaging>jar</packaging>
     <artifactId>hal-annotation-processor</artifactId>
-
+    
     <dependencies>
         <dependency>
             <groupId>i.c0d.eu</groupId>
             <artifactId>hal-annotation</artifactId>
-            <version>1.2-SNAPSHOT</version>
+            <version>1.2.2-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <!--<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.0</version>
-                <configuration>
-                    <annotationProcessors>
-                        <annotationProcessor>
-                            i.c0d.eu.hal.annotation.processor.HalAnnotationProcessor</annotationProcessor>
-                    </annotationProcessors>
-                    <debug>true</debug>
-                    <optimize>true</optimize>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                    <compilerArguments>
-                        <AaddGeneratedAnnotation>true</AaddGeneratedAnnotation>
-                        <Adebug>true</Adebug>
-                    </compilerArguments>
-                </configuration>
-
-            </plugin>-->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.3.2</version>

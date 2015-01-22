@@ -20,13 +20,12 @@ import java.util.Set;
 public class HalAnnotationProcessor extends AbstractProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        System.out.println("In Processor");
         if(annotations.size() == 0)
             return false;
 
         Set<? extends Element> linkElements = roundEnv.getElementsAnnotatedWith(HalLink.class);
         Set<? extends Element> embeddedElements = roundEnv.getElementsAnnotatedWith(HalEmbedded.class);
-
+        
         if (linkElements.size() > 0) {
             Iterator<? extends Element> linkElementsIterator = linkElements.iterator();
             Element linkElement = null;
@@ -34,16 +33,32 @@ public class HalAnnotationProcessor extends AbstractProcessor {
                 linkElement = linkElementsIterator.next();
             }
             if (linkElementsIterator.hasNext()) {
-                processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "Too many @HalLink annotation (max=1)", linkElementsIterator.next());
-                System.out.println("Too many @HalLink annotation (max=1)");
+                Element nextLinkElement = linkElementsIterator.next();
+                if (linkElement.getEnclosingElement() == nextLinkElement.getEnclosingElement()) {
+                    processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "Too many @HalLink annotation (max=1)", nextLinkElement);
+                }
             }
             if (linkElement != null && !(linkElement.asType().toString().equals("i.c0d.eu.hal.LinkElement")
                     || linkElement.asType().toString().equals("java.util.Set<i.c0d.eu.hal.LinkElement>"))) {
-                processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "Invalid type for @HalLink annotation (valid types are: i.c0d.eu.hal.LinkElement or java.util.Set<i.c0d.eu.hal.LinkElement>)", linkElement);
+                processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "Invalid type for @Hal annotation (valid types are: i.c0d.eu.hal.LinkElement or java.util.Set<i.c0d.eu.hal.LinkElement>)", linkElement);
             }
         }
-        if (embeddedElements.size() > 1) {
-            processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "Too many @HalEmbedded annotation (max=1)", embeddedElements.iterator().next());
+
+        if (embeddedElements.size() > 0) {
+            Iterator<? extends Element> embeddedElementsIterator = embeddedElements.iterator();
+            Element embeddedElement = null;
+            if (embeddedElementsIterator.hasNext()) {
+                embeddedElement = embeddedElementsIterator.next();
+            }
+            if (embeddedElementsIterator.hasNext()) {
+                Element nextEmbeddedElement = embeddedElementsIterator.next();
+                if (embeddedElement.getEnclosingElement() == nextEmbeddedElement.getEnclosingElement()) {
+                    processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "Too many @HalEmbedded annotation (max=1)", embeddedElementsIterator.next());
+                }
+            }
+            if (embeddedElement != null && !embeddedElement.asType().toString().startsWith("i.c0d.eu.hal.EmbeddedElement")) {
+                processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "Invalid type for @HalEmbedded annotation (valid types are: i.c0d.eu.hal.EmbeddedElement)", embeddedElement);
+            }
         }
 
         return false;
