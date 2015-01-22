@@ -10,49 +10,125 @@ hal annotator provides two annotations ```@HalLink``` and ```@HalEmbedded```,
 ```@HalEmbedded``` can be used to annotate any Object.
 
 Example:
-```java
+```java 
 package i.c0d.eu.hal.example;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import i.c0d.eu.hal.EmbeddedElement;
 import i.c0d.eu.hal.LinkElement;
 import i.c0d.eu.hal.annotation.HalEmbedded;
 import i.c0d.eu.hal.annotation.HalLink;
 
 import java.util.Set;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class RestResponse {
 
     @HalLink
-    private Set<LinkElement> name;
+    private Set<LinkElement> linkElements;
 
     @HalEmbedded
-    private RestResponse restResponse;
-
-
-    public String getSurname() {
-        return surname;
+    private EmbeddedElement<Set<Order>> embeddedElement;
+    
+    private int currentlyProcessing;
+    
+    private int shippedToday;
+    
+    public Set<LinkElement> getLinkElements() {
+        return linkElements;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setLinkElements(Set<LinkElement> linkElements) {
+        this.linkElements = linkElements;
     }
 
-    private String surname;
-
-
-    public Set<LinkElement> getName() {
-        return name;
+    public EmbeddedElement<Set<Order>> getEmbeddedElement() {
+        return embeddedElement;
     }
 
-    public void setName(Set<LinkElement> name) {
-        this.name = name;
+    public void setEmbeddedElement(EmbeddedElement<Set<Order>> embeddedElement) {
+        this.embeddedElement = embeddedElement;
     }
 
-    public RestResponse getRestResponse() {
-        return restResponse;
+    public int getCurrentlyProcessing() {
+        return currentlyProcessing;
     }
 
-    public void setRestResponse(RestResponse restResponse) {
-        this.restResponse = restResponse;
+    public void setCurrentlyProcessing(int currentlyProcessing) {
+        this.currentlyProcessing = currentlyProcessing;
     }
+
+    public int getShippedToday() {
+        return shippedToday;
+    }
+
+    public void setShippedToday(int shippedToday) {
+        this.shippedToday = shippedToday;
+    }
+
+}
+```
+
+Will generate the following JSON:
+```JSON
+{
+  "currentlyProcessing" : 0,
+  "shippedToday" : 0,
+  "_links" : {
+    "ea:admin" : [ {
+      "href" : "/admins/5",
+      "title" : "Kate"
+    }, {
+      "href" : "/admins/2",
+      "title" : "Fred"
+    } ],
+    "self" : {
+      "href" : "/orders"
+    },
+    "ea:find" : {
+      "href" : "/orders{?id}",
+      "templated" : true
+    },
+    "curies" : [ {
+      "href" : "http://eample.com/docs/rels/{rel}",
+      "templated" : true
+    } ],
+    "next" : {
+      "href" : "/orders?page=2"
+    }
+  },
+  "_embedded" : {
+    "ea:order" : [ {
+      "total" : 20.0,
+      "status" : "processing",
+      "currency" : "USD",
+      "_links" : {
+        "ea:customer" : {
+          "href" : "/customers/12369"
+        },
+        "self" : {
+          "href" : "/orders/124"
+        },
+        "ea:basket" : {
+          "href" : "/baskets/97213"
+        }
+      }
+    }, {
+      "total" : 30.0,
+      "status" : "shipped",
+      "currency" : "USD",
+      "_links" : {
+        "ea:customer" : {
+          "href" : "/customers/7809"
+        },
+        "self" : {
+          "href" : "/orders/123"
+        },
+        "ea:basket" : {
+          "href" : "/baskets/98712"
+        }
+      }
+    } ]
+  }
 }
 ```
