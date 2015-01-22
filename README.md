@@ -7,7 +7,7 @@ hal annotator provides two annotations ```@HalLink``` and ```@HalEmbedded```,
 * ```LinkElement```
 * ```Set<LinkElement>```
 
-```@HalEmbedded``` can be used to annotate any Object.
+```@HalEmbedded``` must be used to annotate ```EmbeddedElement<T>```.
 
 Example:
 ```java 
