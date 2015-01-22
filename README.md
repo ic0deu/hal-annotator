@@ -2,11 +2,12 @@
 Library to serialize objects in HAL format (http://stateless.co/hal_specification.html)
 
 # Usage
-hal annotator provides two annotations ```@HalLink``` and ```@HalEmbedded```
+hal annotator provides two annotations ```@HalLink``` and ```@HalEmbedded```,
 ```@HalLink``` must be used only to annotate fields of the following types:
 * ```LinkElement```
 * ```Set<LinkElement>```
-```@HalEmbedded``` can be used to annotate any Objects.
+
+```@HalEmbedded``` can be used to annotate any Object.
 
 Example:
 ```java
